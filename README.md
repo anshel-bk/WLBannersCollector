@@ -15,3 +15,6 @@ cp .env.example .env
 2. Запуск скрипта
 
 uv run main.py
+
+3. Обновление скрипта
+сd 'путь к скрипту' git pull
