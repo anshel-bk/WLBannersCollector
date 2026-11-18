@@ -2,6 +2,7 @@ git clone https://github.com/anshel-bk/WLBannersCollector.git
 
 uv venv
 source .venv/bin/activate  # Linux/macOS
+
 .venv\Scripts\activate   # Windows
 
 # Установка пакетов
