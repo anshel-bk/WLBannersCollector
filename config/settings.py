@@ -1,21 +1,13 @@
 from enum import StrEnum
 from pathlib import Path
+from typing import NamedTuple
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 CURRENT_FILE_PATH = Path(__file__).resolve()
 BASE_DIR = CURRENT_FILE_PATH.parent.parent
 
-class IgnoredSkins(StrEnum):
-    SKIN_1 = "bongacams_zerkalo"
-    SKIN_2 = "bongacamslab"
-    SKIN_3 = "bongacams_info"
-    SKIN_4 = "bongocams_info"
-    SKIN_5 = "bongacams_quest"
 
-class CheckedUrls(StrEnum):
-    MAIN_URL = "listing"
-    ALL_MODELS = "all_models"
 
 
 
@@ -28,6 +20,10 @@ class Settings(BaseSettings):
     MAIN_URL: str = "https://rt.bongacams.quest"
     GROUPS_URL: str = "https:///rus.bonga14.com/dev-action/get-skin-groups"
     SET_SKIN_URL: str = "https://rt.bongacams.quest/dev-action/set-skin-group"
+
+    class CookieWarning18(NamedTuple):  # кука которая отвечает за обход баннера подтверждения возраста
+        name: str = "warning18"
+        value: str = "%5B%22ru_RU%22%5D"  # Supports default values
 
 
     SCREENSHOTS_FILE_PATH: Path = BASE_DIR / "screenshots"

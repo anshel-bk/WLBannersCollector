@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright
 
 from config.settings import settings
-from pages_funcs.services import get_skins_list, get_data
+from utils.services import get_skins_list, get_data
 
 
 def main():

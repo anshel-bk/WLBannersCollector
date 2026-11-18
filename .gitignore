@@ -1,0 +1,21 @@
+tests/TestFiles/
+results/
+tests/resources/CounterUser/CounterLog/
+tests/resources/CounterUser/CounterUserPromo/
+*.png
+*/__pycache__/*
+*.pyc
+tests/visual_tests/Profile/__pycache__/
+RunStream
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+
+
+# IDE (PyCharm / VSCode)
+.idea/
+.vscode/
