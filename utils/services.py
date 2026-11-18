@@ -108,5 +108,5 @@ def delete_new_mobile_cookies(page: Page):
     page.context.clear_cookies(name="bcm")
 
 def write_txt(text):
-    with open(f"{BASE_DIR}/'failed_urls.txt", 'a', encoding='utf-8') as f:
+    with open(f"{BASE_DIR}/failed_urls.txt", 'a', encoding='utf-8') as f:
         f.write(f"{text}\n")
