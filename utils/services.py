@@ -1,7 +1,7 @@
 from playwright._impl._api_structures import SetCookieParam
 from playwright.sync_api import Page
 
-from config.settings import settings
+from config.settings import settings, BASE_DIR
 from config.urls import IgnoredSkins, CheckedUrls
 from utils.screenshot_gluer import glue_screenshot
 
@@ -28,8 +28,15 @@ def navigate_page(page: Page,url_skin: str):
         }
         page.context.add_cookies([cookie_warning_18])
         page.goto(url_skin)
-    except TimeoutError:
+        if page.locator("body").is_visible(timeout=4000):
+            page.evaluate(
+                """() => {
+                document.body.classList.add('no_popups');
+            }"""
+            )
+    except Exception:
         print(f"Не удалось перейти на URL [{url_skin}]")
+        write_txt(url_skin)
         return
 
 def get_data(page: Page,skin: str):
@@ -52,6 +59,7 @@ def collect_screenshot(page: Page,skin: str,version: str) -> list:
     for url_for_check in CheckedUrls:
         url = f"{settings.MAIN_URL}/{url_for_check}"
         navigate_page(page,url)
+        url_for_check = "listing" if url_for_check == CheckedUrls.MAIN_URL else url_for_check
         screenshot_name = f"{url_for_check}|{skin}|{version}.png"
         path_to_screenshot = f"{settings.SCREENSHOTS_FILE_PATH}/{skin}/{screenshot_name}"
         page.screenshot(path=path_to_screenshot, full_page=True)
@@ -98,3 +106,7 @@ def check_new_mobile_transfer(page,url: str):
 def delete_new_mobile_cookies(page: Page):
     page.context.clear_cookies(name="__DEV_bcm_enable_spa_whitelist")
     page.context.clear_cookies(name="bcm")
+
+def write_txt(text):
+    with open(f"{BASE_DIR}/'failed_urls.txt", 'a', encoding='utf-8') as f:
+        f.write(f"{text}\n")

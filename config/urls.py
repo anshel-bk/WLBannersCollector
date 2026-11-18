@@ -9,5 +9,5 @@ class IgnoredSkins(StrEnum):
     SKIN_5 = "bongacams_quest"
 
 class CheckedUrls(StrEnum):
-    MAIN_URL = "listing"
+    MAIN_URL = ""
     ALL_MODELS = "all_models"
