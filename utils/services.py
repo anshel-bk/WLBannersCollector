@@ -8,9 +8,9 @@ from utils.screenshot_gluer import glue_screenshot
 
 def get_skins_list(page: Page):
     failed_skins = read_txt()
-    failed_first = None
+    failed_first = ""
     if failed_skins:
-        while failed_first not in ("н","y") and failed_first not in ("т","n"):
+        while failed_first.lower().strip() not in ("н","y") and failed_first.lower().strip() not in ("т","n"):
             failed_first = input(f"Были обнаружены ошибки с прошлых проверок на скинах\n{''.join(failed_skins)}\n"
                                  f"Нажмите Y чтобы проверить только их или N чтобы начать проверку всех скинов:")
         if failed_first.lower().strip() in ("н","y"):
