@@ -19,6 +19,7 @@ def get_skins_list(page: Page):
         elif failed_first.lower().strip() in ("т","n"):
             skins = get_skins_list_by_req(page)
             return skins
+        return None
     else:
         skins = get_skins_list_by_req(page)
         return skins
