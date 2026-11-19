@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright
 
 from config.settings import settings
-from utils.services import get_skins_list, get_data
+from utils.services import get_skins_list, get_data, clean_txt_log
 
 
 def main():
@@ -13,12 +13,14 @@ def main():
         }
         mobile_device = p.devices["iPhone 14 Pro"]
         context = browser.new_context(**mobile_device,http_credentials=http_credentials)
+        context.set_default_navigation_timeout(settings.DEFAULT_TIMEOUT)
         page = context.new_page()
         skins = get_skins_list(page)
         for skin in skins:
             get_data(page, skin)
         context.close()
         browser.close()
+        clean_txt_log()
 
 
 

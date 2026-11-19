@@ -7,18 +7,35 @@ from utils.screenshot_gluer import glue_screenshot
 
 
 def get_skins_list(page: Page):
+    failed_skins = read_txt()
+    failed_first = None
+    if failed_skins:
+        while failed_first not in ("н","y") and failed_first not in ("т","n"):
+            failed_first = input(f"Были обнаружены ошибки с прошлых проверок на скинах\n{''.join(failed_skins)}\n"
+                                 f"Нажмите Y чтобы проверить только их или N чтобы начать проверку всех скинов:")
+        if failed_first.lower().strip() in ("н","y"):
+            skins = [s.strip("\n") for s in failed_skins]
+            return skins
+        elif failed_first.lower().strip() in ("т","n"):
+            skins = get_skins_list_by_req(page)
+            return skins
+    else:
+        skins = get_skins_list_by_req(page)
+        return skins
+
+def get_skins_list_by_req(page):
     req = page.request.get(settings.GROUPS_URL)
     req_json = req.json()
     skins = req_json.get("skins")
     if skins is None:
         print("Не было найдено ни одного скинхеда")
         raise ValueError
-    skins = [key for key,value in skins.items() if key not in IgnoredSkins]
+    skins = [key for key, value in skins.items() if key not in IgnoredSkins]
     print(f"Всего обнаружено скинов {len(skins)}\n"
-           f"Список скинов: {'\n'.join(skins)}")
+          f"Список скинов: {'\n'.join(skins)}")
     return skins
 
-def navigate_page(page: Page,url_skin: str):
+def navigate_page(page: Page,url_skin: str,skin):
     try:
         cookie_warning_18: SetCookieParam = {
             "name": settings.CookieWarning18().name,
@@ -36,7 +53,7 @@ def navigate_page(page: Page,url_skin: str):
             )
     except Exception:
         print(f"Не удалось перейти на URL [{url_skin}]")
-        write_txt(url_skin)
+        write_txt(skin)
         return
 
 def get_data(page: Page,skin: str):
@@ -55,10 +72,10 @@ def collect_screenshot(page: Page,skin: str,version: str) -> list:
     url_skin = f"{settings.SET_SKIN_URL}/{skin}"
     paths = []
     print(f"Проверяем {skin} - Версия {version}")
-    navigate_page(page,url_skin)
+    navigate_page(page,url_skin,skin)
     for url_for_check in CheckedUrls:
         url = f"{settings.MAIN_URL}/{url_for_check}"
-        navigate_page(page,url)
+        navigate_page(page,url,skin)
         url_for_check = "listing" if url_for_check == CheckedUrls.MAIN_URL else url_for_check
         screenshot_name = f"{url_for_check}|{skin}|{version}.png"
         path_to_screenshot = f"{settings.SCREENSHOTS_FILE_PATH}/{skin}/{screenshot_name}"
@@ -110,3 +127,13 @@ def delete_new_mobile_cookies(page: Page):
 def write_txt(text):
     with open(f"{BASE_DIR}/failed_urls.txt", 'a', encoding='utf-8') as f:
         f.write(f"{text}\n")
+
+def read_txt():
+    with open(f"{BASE_DIR}/failed_urls.txt", 'r', encoding='utf-8') as f:
+        text = f.readlines()
+        text = set(text)
+    return text
+
+def clean_txt_log():
+    with open(f"{BASE_DIR}/failed_urls.txt", 'r', encoding='utf-8') as f:
+        pass

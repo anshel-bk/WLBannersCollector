@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     TEST_PAGE_LOGIN: str
     TEST_PAGE_PASSWORD: str
 
+    DEFAULT_TIMEOUT: int = 30000
+
     SCREENSHOT_NAME_TEMPLATE: str = "%url%_%skin_name%_NEW"
 
     MAIN_URL: str = "https://rt.bongacams.quest"
